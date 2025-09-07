@@ -19,16 +19,8 @@ FacultySystemDB> db.student.insertOne({
         address: "Minia"
     },
     Grades: [
-        {
-            cname: "c#",
-            grade: 60,
-            pass: true
-        },
-        {
-            cname: "JS",
-            grade: 100,
-            pass: true
-        }
+        { cname: "c#", grade: 60, pass: true },
+        { cname: "JS", grade: 100, pass: true }
     ],
     IsFired: false
 })
