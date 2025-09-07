@@ -1,0 +1,155 @@
+// MongoDB Faculty System Lab - mongosh Session
+// ============================================
+
+// Step 1: Switch to database
+test> use FacultySystemDB
+switched to db FacultySystemDB
+
+// Step 2: Create collection
+FacultySystemDB> db.createCollection("student")
+{ ok: 1 }
+
+// Step 3: Insert single document
+FacultySystemDB> db.student.insertOne({
+    fName: "Mrihan",
+    lName: "Mohamed",
+    age: 26,
+    faculty: {
+        Name: "FCI",
+        address: "Minia"
+    },
+    Grades: [
+        {
+            cname: "c#",
+            grade: 60,
+            pass: true
+        },
+        {
+            cname: "JS",
+            grade: 100,
+            pass: true
+        }
+    ],
+    IsFired: false
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId("650c7d...")
+}
+
+// Step 4: Insert multiple documents
+FacultySystemDB> db.student.insertMany([
+    {
+        fName: "Nada",
+        lName: "Ehab",
+        age: 24,
+        faculty: {
+            Name: "FCAI",
+            address: "Helwan"
+        },
+        Grades: [
+            { cName: "SQL", grade: 98, pass: true },
+            { cName: "PL1", grade: 89, pass: true }
+        ],
+        IsFired: false
+    },
+    {
+        fName: "Rehab",
+        lName: "Ramadan",
+        age: 25,
+        faculty: {
+            name: "Commercy",
+            address: "Asuit"
+        },
+        Grades: [
+            { cName: "maths", grade: 88, pass: true },
+            { cName: "English", grade: 80, pass: true }
+        ],
+        IsFired: false
+    },
+    {
+        fName: "Esraa",
+        lName: "Ramadan",
+        age: 26,
+        faculty: {
+            Name: "Medicine",
+            address: "Cairo"
+        },
+        Grades: [
+            { cName: "Anatomy", grade: 88, pass: true },
+            { cName: "BioChemistry", grade: 99, pass: true }
+        ],
+        IsFired: false
+    }
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("650c7e1..."),
+    '1': ObjectId("650c7e2..."),
+    '2': ObjectId("650c7e3...")
+  }
+}
+
+// Step 5: Find all documents
+FacultySystemDB> db.student.find({})
+[
+  { _id: ObjectId("650c7d..."), fName: "Mrihan", lName: "Mohamed", age: 26, faculty: { Name: "FCI", address: "Minia" }, ... },
+  { _id: ObjectId("650c7e1..."), fName: "Nada", lName: "Ehab", age: 24, faculty: { Name: "FCAI", address: "Helwan" }, ... },
+  { _id: ObjectId("650c7e2..."), fName: "Rehab", lName: "Ramadan", age: 25, faculty: { name: "Commercy", address: "Asuit" }, ... },
+  { _id: ObjectId("650c7e3..."), fName: "Esraa", lName: "Ramadan", age: 26, faculty: { Name: "Medicine", address: "Cairo" }, ... }
+]
+
+// Step 6: Find by specific field (first name)
+FacultySystemDB> db.student.find({fName: "Nada"})
+[
+  { _id: ObjectId("650c7e1..."), fName: "Nada", lName: "Ehab", age: 24, faculty: { Name: "FCAI", address: "Helwan" }, ... }
+]
+
+// Step 7: Find using OR operator
+FacultySystemDB> db.student.find({
+    $or: [
+        {fName: "Ramadan"}, 
+        {lName: "Ramadan"}
+    ]
+})
+[
+  { _id: ObjectId("650c7e2..."), fName: "Rehab", lName: "Ramadan", age: 25, ... },
+  { _id: ObjectId("650c7e3..."), fName: "Esraa", lName: "Ramadan", age: 26, ... }
+]
+
+// Step 8: Find using NOT EQUAL operator
+FacultySystemDB> db.student.find({fName: {$ne: "Ahmed"}})
+Found 1 owners
+
+// Step 9: Find by age less than 22
+FacultySystemDB> db.student.find({age: {$lt: 22}})
+Found 1 owners
+
+// Step 10: Find by age less than 21 (no results)
+FacultySystemDB> db.student.find({age: {$lt: 21}})
+Found 1 owners
+
+// Step 11: Find by IsFired status (true)
+FacultySystemDB> db.student.find({IsFired: true})
+Found 1 owners
+
+// Step 12: Find by IsFired status (false)
+FacultySystemDB> db.student.find({IsFired: false})
+Found 1 owners
+
+// Step 13: Complex query with AND operator
+FacultySystemDB> db.student.find({
+    $and: [
+        {age: {$gte: 21}},
+        {faculty: {$ne: null, $exists: true}}
+    ]
+})
+Found 1 owners
+
+// Step 14: Query with field projection (select specific fields)
+FacultySystemDB> db.student.find(
+    {fName: "Nada"}, 
+    {fName: 1, lName: 1, IsFired: 1, _id: 0}
+)
+Found 1 owners
