@@ -1,13 +1,17 @@
-// MongoDB Faculty System Lab - mongosh Session
-// ============================================
+# MongoDB Faculty System Lab – mongosh Session
 
+---
+
+```bash
 // Step 1: Switch to database
 test> use FacultySystemDB
 switched to db FacultySystemDB
 
+
 // Step 2: Create collection
-FacultySystemDB> db.createCollection("student")
+db.createCollection("student")
 { ok: 1 }
+
 
 // Step 3: Insert single document
 FacultySystemDB> db.student.insertOne({
